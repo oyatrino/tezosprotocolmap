@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gpx version="1.1" creator="Tezos Protocols Maps (by Copolycube)">
+  <wpt lat="37.9838" lon="23.7275">
+    <name>Athens, Greece</name>
+    <desc>Capital of Greece</desc>
+  </wpt>
+  <wpt lat="32.5439" lon="44.4208">
+    <name>Babylon, Iraq</name>
+    <desc>Ancient city in Iraq</desc>
+  </wpt>
+  <wpt lat="36.8508" lon="10.1833">
+    <name>Carthage, Tunisia</name>
+    <desc>Ancient city in Tunisia</desc>
+  </wpt>
+  <wpt lat="38.4814" lon="22.5014">
+    <name>Delphi, Greece</name>
+    <desc>Ancient city in Greece</desc>
+  </wpt>
+  <wpt lat="35.6895" lon="139.6917">
+    <name>Edo (Tokyo), Japan</name>
+    <desc>Former name of Tokyo, Japan</desc>
+  </wpt>
+  <wpt lat="43.7714" lon="11.2542">
+    <name>Florence, Italy</name>
+    <desc>City in Italy</desc>
+  </wpt>
+  <wpt lat="37.1773" lon="-3.5986">
+    <name>Granada, Spain</name>
+    <desc>City in Spain</desc>
+  </wpt>
+  <wpt lat="38.3656" lon="20.7167">
+    <name>Ithaca, Greece</name>
+    <desc>Ancient city in Greece</desc>
+  </wpt>
+  <wpt lat="-6.1751" lon="106.8650">
+    <name>Jakarta, Indonesia</name>
+    <desc>Capital of Indonesia</desc>
+  </wpt>
+  <wpt lat="27.7172" lon="85.3240">
+    <name>Kathmandu, Nepal</name>
+    <desc>Capital of Nepal</desc>
+  </wpt>
+  <wpt lat="-12.0464" lon="-77.0428">
+    <name>Lima, Peru</name>
+    <desc>Capital of Peru</desc>
+  </wpt>
+  <wpt lat="19.0760" lon="72.8777">
+    <name>Mumbai, India</name>
+    <desc>City in India</desc>
+  </wpt>
+  <wpt lat="-1.2833" lon="36.8167">
+    <name>Nairobi, Kenya</name>
+    <desc>Capital of Kenya</desc>
+  </wpt>
+</gpx>
