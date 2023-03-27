@@ -1,4 +1,4 @@
-# tezos protocol map
+# tezos protocols map
 Mapping Tezos protocol names on the globe
 
 
