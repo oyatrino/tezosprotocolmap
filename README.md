@@ -1,6 +1,7 @@
 # tezos protocols map
 Mapping Tezos protocol names on the globe
 
+![Tezos Protocol Cities Map](map.png)
 
 ## context
 * *cheeses* for feature test nets 
@@ -15,4 +16,4 @@ Mapping Tezos protocol names on the globe
 - script to extract cities from tezos project
 - trigger this project on changes from previous URL (a few times a year)
 
-- generate map (more than just https://www.gpsvisualizer.com/map_input?country=ca&form:dynamic_data=https%3A%2F%2Fraw.githubusercontent.com%2Fcotezos%2Ftezosprotocolmap%2Fmain%2Ftezos.gpx&force_type=r&form=html&google_wpt_labels=1&google_wpt_sym=pin&trk_as_wpt=blank&trk_colorize=n&trk_opacity=100&units=metric&wpt_color=blue&wpt_list=name )
+- ~~generate map~~ done — `scripts/generate_map.py` renders `map.png` from `tezos.gpx`
