@@ -2,7 +2,7 @@ name: Update Tezos Protocol GPX
 
 on:
   schedule:
-    - cron: "0 9 1 * *" # 1st of every month at 09:00 UTC
+    - cron: "0 9 1 */3 *" # 1st of every 3rd month at 09:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -22,7 +22,7 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Run update script
-        run: python scripts/update_gpx.py
+        run: python scripts/update_gpx.py --url "${{ vars.NAMING_URL }}"
 
       - name: Commit and push if changed
         run: |

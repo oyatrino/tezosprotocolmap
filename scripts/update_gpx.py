@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Scrape Tezos protocol names and update tezos.gpx with new city waypoints."""
 
+import argparse
 import re
 import sys
 import time
@@ -8,7 +9,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-NAMING_URL = "https://octez.tezos.com/docs/protocols/naming.html"
+DEFAULT_NAMING_URL = "https://octez.tezos.com/docs/protocols/naming.html"
 GPX_PATH = "tezos.gpx"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 
@@ -21,9 +22,9 @@ CITY_OVERRIDES = {
 }
 
 
-def scrape_protocols():
+def scrape_protocols(naming_url):
     """Return a list of city names from the Tezos naming page (protocol >= 004)."""
-    resp = requests.get(NAMING_URL, timeout=30)
+    resp = requests.get(naming_url, timeout=30)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
 
@@ -140,8 +141,13 @@ def write_gpx(existing_text, wpt_blocks):
 
 
 def main():
-    print("Scraping protocol names...")
-    protocols = scrape_protocols()
+    parser = argparse.ArgumentParser(description="Update tezos.gpx with new protocol cities.")
+    parser.add_argument("--url", default=DEFAULT_NAMING_URL, help="URL of the Tezos protocol naming page")
+    args = parser.parse_args()
+
+    naming_url = args.url
+    print(f"Scraping protocol names from {naming_url}...")
+    protocols = scrape_protocols(naming_url)
     print(f"  Found {len(protocols)} protocols: {', '.join(protocols)}")
 
     print("Reading existing GPX...")
