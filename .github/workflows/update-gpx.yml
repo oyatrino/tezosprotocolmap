@@ -18,17 +18,23 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgeos-dev libproj-dev
+
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install requests beautifulsoup4 cartopy matplotlib
 
       - name: Run update script
         run: python scripts/update_gpx.py --url "${{ vars.NAMING_URL }}"
 
+      - name: Generate map
+        run: python scripts/generate_map.py
+
       - name: Commit and push if changed
         run: |
-          git diff --quiet tezos.gpx && exit 0
+          git diff --quiet tezos.gpx && [ -z "$(git ls-files --others --exclude-standard map.png)" ] && git diff --quiet map.png 2>/dev/null && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tezos.gpx
-          git commit -m "Update tezos.gpx with new protocol cities"
+          git add tezos.gpx map.png
+          git commit -m "Update tezos.gpx and map with new protocol cities"
           git push
