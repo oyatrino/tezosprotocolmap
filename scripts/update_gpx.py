@@ -218,6 +218,7 @@ def gpx_coords_for_protocols(scraped, gpx_text):
 
 def build_protocols_json(scraped, tzkt_data, gpx_coords):
     """Merge scraped numbers, TzKT data, and GPX coords into protocols dict."""
+    has_tzkt = bool(tzkt_data)
     result = {}
     for number, name in scraped:
         tzkt_alias = TZKT_ALIAS_MAP.get(name, name)
@@ -228,7 +229,7 @@ def build_protocols_json(scraped, tzkt_data, gpx_coords):
             "number": number,
             "hash": tzkt.get("hash"),
             "activationDate": tzkt.get("activationDate"),
-            "mainnet": bool(tzkt.get("hash")),
+            "mainnet": bool(tzkt.get("hash")) if has_tzkt else None,
             "lat": coords[0] if coords else None,
             "lon": coords[1] if coords else None,
         }
