@@ -6,6 +6,8 @@ Mapping Tezos protocol names on the globe
 
 ![Tezos Protocol Cities Map](map.png)
 
+[View interactive map](https://cotezos.github.io/tezosprotocolmap/)
+
 ## context
 * *cheeses* for feature test nets 
     * => no clear list for those AFAIK.
