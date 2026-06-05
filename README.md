@@ -1,6 +1,9 @@
 # tezos protocols map
 Mapping Tezos protocol names on the globe
 
+[![Update GPX](https://github.com/cotezos/tezosprotocolmap/actions/workflows/update-gpx.yml/badge.svg)](https://github.com/cotezos/tezosprotocolmap/actions/workflows/update-gpx.yml)
+[![protocols](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/cotezos/tezosprotocolmap/main/protocol-count.json)](protocols.json)
+
 ![Tezos Protocol Cities Map](map.png)
 
 ## context
