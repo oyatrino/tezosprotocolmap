@@ -32,9 +32,9 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          git diff --quiet tezos.gpx && [ -z "$(git ls-files --others --exclude-standard map.png)" ] && git diff --quiet map.png 2>/dev/null && exit 0
+          git diff --quiet tezos.gpx map.png protocols.json protocol-count.json 2>/dev/null && [ -z "$(git ls-files --others --exclude-standard tezos.gpx map.png protocols.json protocol-count.json)" ] && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tezos.gpx map.png
+          git add tezos.gpx map.png protocols.json protocol-count.json
           git commit -m "Update tezos.gpx and map with new protocol cities"
           git push

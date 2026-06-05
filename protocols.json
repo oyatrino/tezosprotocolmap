@@ -1,0 +1,162 @@
+{
+  "Athens": {
+    "number": 4,
+    "hash": "Pt24m4xiPbLDhVgVfABUjirbmda3yohdN82Sp9FeuAXJ4eV9otd",
+    "activationDate": "2019-05-30T00:58:55Z",
+    "mainnet": true,
+    "lat": 37.9838,
+    "lon": 23.7275
+  },
+  "Babylon": {
+    "number": 5,
+    "hash": "PsBabyM1eUXZseaJdmXFApDSBqj8YBfwELoxZHHW77EMcAbbwAS",
+    "activationDate": "2019-10-18T08:18:28Z",
+    "mainnet": true,
+    "lat": 32.5439,
+    "lon": 44.4208
+  },
+  "Carthage": {
+    "number": 6,
+    "hash": "PsCARTHAGazKbHtnKfLzQg3kms52kSRpgnDY982a9oYsSXRLQEb",
+    "activationDate": "2020-03-05T04:40:30Z",
+    "mainnet": true,
+    "lat": 36.8508,
+    "lon": 10.1833
+  },
+  "Delphi": {
+    "number": 7,
+    "hash": "PsDELPH1Kxsxt8f9eWbxQeRxkjfbxoqM52jvs5Y5fBxWWh4ifpo",
+    "activationDate": "2020-11-12T12:57:22Z",
+    "mainnet": true,
+    "lat": 38.4814,
+    "lon": 22.5014
+  },
+  "Edo": {
+    "number": 8,
+    "hash": "PtEdo2ZkT9oKpimTah6x2embF25oss54njMuPzkJTEi5RqfdZFA",
+    "activationDate": "2021-02-13T21:04:10Z",
+    "mainnet": true,
+    "lat": 35.6895,
+    "lon": 139.6917
+  },
+  "Florence": {
+    "number": 9,
+    "hash": "PsFLorenaUUuikDWvMDr6fGBRG8kt3e3D3fHoXK1j1BFRxeSH4i",
+    "activationDate": "2021-05-11T01:32:06Z",
+    "mainnet": true,
+    "lat": 43.7714,
+    "lon": 11.2542
+  },
+  "Granada": {
+    "number": 10,
+    "hash": "PtGRANADsDU8R9daYKAgWnQYAJ64omN1o3KMGVCykShA97vQbvV",
+    "activationDate": "2021-08-06T09:36:46Z",
+    "mainnet": true,
+    "lat": 37.1773,
+    "lon": -3.5986
+  },
+  "Hangzhou": {
+    "number": 11,
+    "hash": "PtHangz2aRngywmSRGGvrcTyMbbdpWdpFKuS4uMWxg2RaH9i1qx",
+    "activationDate": "2021-12-04T03:24:22Z",
+    "mainnet": true,
+    "lat": 30.2741,
+    "lon": 120.1551
+  },
+  "Ithaca": {
+    "number": 12,
+    "hash": "Psithaca2MLRFYargivpo7YvUr7wUDqyxrdhC5CQq78mRvimz6A",
+    "activationDate": "2022-04-01T17:06:59Z",
+    "mainnet": true,
+    "lat": 38.3656,
+    "lon": 20.7167
+  },
+  "Jakarta": {
+    "number": 13,
+    "hash": "PtJakart2xVj7pYXJBXrqHgd82rdkLey5ZeeGwDgPp9rhQUbSqY",
+    "activationDate": "2022-06-28T21:31:59Z",
+    "mainnet": true,
+    "lat": -6.1751,
+    "lon": 106.865
+  },
+  "Kathmandu": {
+    "number": 14,
+    "hash": "PtKathmankSpLLDALzWw7CGD2j2MtyveTwboEYokqUCP4a1LxMg",
+    "activationDate": "2022-09-23T20:36:44Z",
+    "mainnet": true,
+    "lat": 27.7172,
+    "lon": 85.324
+  },
+  "Lima": {
+    "number": 15,
+    "hash": "PtLimaPtLMwfNinJi9rCfDPWea8dFgTZ1MeJ9f1m2SRic6ayiwW",
+    "activationDate": "2022-12-19T01:57:59Z",
+    "mainnet": true,
+    "lat": -12.0464,
+    "lon": -77.0428
+  },
+  "Mumbai": {
+    "number": 16,
+    "hash": "PtMumbai2TmsJHNGRkD8v8YDbtao7BLUC3wjASn1inAKLFCjaH1",
+    "activationDate": "2023-03-29T16:40:29Z",
+    "mainnet": true,
+    "lat": 19.076,
+    "lon": 72.8777
+  },
+  "Nairobi": {
+    "number": 17,
+    "hash": "PtNairobiyssHuh87hEhfVBGCVrK3WnS8Z2FT4ymB5tAa4r1nQf",
+    "activationDate": "2023-06-24T00:07:10Z",
+    "mainnet": true,
+    "lat": -1.2833,
+    "lon": 36.8167
+  },
+  "Oxford": {
+    "number": 18,
+    "hash": "ProxfordYmVfjWnRcgjWH36fW6PArwqykTFzotUxRs6gmTcZDuH",
+    "activationDate": "2024-02-09T13:23:45Z",
+    "mainnet": true,
+    "lat": 51.752,
+    "lon": -1.2577
+  },
+  "ParisC": {
+    "number": 20,
+    "hash": "PsParisCZo7KAh1Z1smVd9ZMZ1HHn5gkzbM94V3PLCpknFWhUAi",
+    "activationDate": "2024-06-25T07:30:25Z",
+    "mainnet": true,
+    "lat": 48.8566,
+    "lon": 2.3522
+  },
+  "Quebec": {
+    "number": 21,
+    "hash": "PsQuebecnLByd3JwTiGadoG4nGWi3HYiLXUjkibeFV8dCFeVMUg",
+    "activationDate": "2025-01-20T20:57:16Z",
+    "mainnet": true,
+    "lat": 46.8139,
+    "lon": -71.208
+  },
+  "Rio": {
+    "number": 22,
+    "hash": "PsRiotumaAMotcRoDWW1bysEhQy2n1M5fy8JgRp8jjRfHGmfeA7",
+    "activationDate": "2025-05-01T11:07:24Z",
+    "mainnet": true,
+    "lat": -22.9068,
+    "lon": -43.1729
+  },
+  "Seoul": {
+    "number": 23,
+    "hash": "PtSeouLouXkxhg39oWzjxDWaCydNfR3RxCUrNe4Q9Ro8BTehcbh",
+    "activationDate": "2025-09-19T14:59:28Z",
+    "mainnet": true,
+    "lat": 37.5665,
+    "lon": 126.978
+  },
+  "Tallinn": {
+    "number": 24,
+    "hash": "PtTALLiNtPec7mE7yY4m3k26J8Qukef3E3ehzhfXgFZKGtDdAXu",
+    "activationDate": "2026-01-24T16:06:58Z",
+    "mainnet": true,
+    "lat": 59.437,
+    "lon": 24.7536
+  }
+}
