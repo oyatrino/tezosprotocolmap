@@ -30,8 +30,17 @@
     maxZoom: 18
   }).addTo(map);
 
+  function esc(s) {
+    var el = document.createElement("span");
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
   fetch(PROTOCOLS_URL)
-    .then(function (r) { return r.json(); })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
     .then(function (data) {
       var entries = Object.keys(data).map(function (name) {
         var d = data[name];
@@ -60,10 +69,10 @@
         var network = d.mainnet ? "Mainnet" : "Testnet only";
 
         marker.bindPopup(
-          "<strong>" + String(d.number).padStart(3, "0") + " " + d.name + "</strong><br>" +
-          "Hash: <code>" + hashTrunc + "</code><br>" +
-          "Activated: " + date + "<br>" +
-          "Network: " + network
+          "<strong>" + esc(String(d.number).padStart(3, "0") + " " + d.name) + "</strong><br>" +
+          "Hash: <code>" + esc(hashTrunc) + "</code><br>" +
+          "Activated: " + esc(date) + "<br>" +
+          "Network: " + esc(network)
         );
 
         trailCoords.push([d.lat, d.lon]);
@@ -87,6 +96,8 @@
           '<i style="background:' + COLOR_MAINNET + '"></i> Mainnet<br>' +
           '<i style="background:' + COLOR_TESTNET + '"></i> Testnet only<br>' +
           '<span class="line"></span> Chronological trail';
+        L.DomEvent.disableClickPropagation(div);
+        L.DomEvent.disableScrollPropagation(div);
         return div;
       };
       legend.addTo(map);
