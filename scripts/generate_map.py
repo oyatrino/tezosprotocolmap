@@ -112,12 +112,15 @@ def generate_map(waypoints, output_path, dpi, protocols=None):
     ax.add_feature(cfeature.COASTLINE, linewidth=0.4, edgecolor="#aaaaaa")
     ax.spines["geo"].set_linewidth(0.5)
 
-    matched = match_protocols(waypoints, protocols) if protocols else {}
+    matched = match_protocols(waypoints, protocols) if protocols is not None else {}
 
     # Draw chronological arrows if we have protocol data.
     if matched:
         wpt_by_label = {short_label(n): (lat, lon) for n, lat, lon in waypoints}
-        ordered = sorted(matched.items(), key=lambda kv: kv[1]["number"])
+        ordered = sorted(
+            ((l, d) for l, d in matched.items() if isinstance(d, dict) and "number" in d),
+            key=lambda kv: kv[1]["number"],
+        )
         trail = [(wpt_by_label[label], label) for label, _ in ordered if label in wpt_by_label]
 
         for i in range(len(trail) - 1):
@@ -142,7 +145,7 @@ def generate_map(waypoints, output_path, dpi, protocols=None):
         label = short_label(name)
         proto = matched.get(label)
 
-        if proto:
+        if proto and "number" in proto:
             color = COLOR_MAINNET if proto.get("mainnet") else COLOR_TESTNET
             number_str = f"{proto['number']:03d} "
         else:
@@ -200,7 +203,7 @@ def main():
     print(f"Parsed {len(waypoints)} waypoints from {args.gpx}")
 
     protocols = load_protocols(args.protocols)
-    if protocols:
+    if protocols is not None:
         print(f"Loaded {len(protocols)} protocols from {args.protocols}")
     else:
         print("No protocols.json loaded; using fallback style")
