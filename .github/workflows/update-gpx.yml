@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update-gpx:
@@ -30,11 +31,19 @@ jobs:
       - name: Generate map
         run: python scripts/generate_map.py
 
-      - name: Commit and push if changed
-        run: |
-          git diff --quiet tezos.gpx map.png protocols.json protocol-count.json 2>/dev/null && [ -z "$(git ls-files --others --exclude-standard tezos.gpx map.png protocols.json protocol-count.json)" ] && exit 0
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tezos.gpx map.png protocols.json protocol-count.json
-          git commit -m "Update tezos.gpx and map with new protocol cities"
-          git push
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "Update protocol data"
+          title: "Update protocol data"
+          body: |
+            Automated quarterly update.
+            Changed: tezos.gpx, protocols.json, map.png, protocol-count.json
+          base: main
+          branch: auto/update-protocol-data
+          delete-branch: true
+          add-paths: |
+            tezos.gpx
+            protocols.json
+            map.png
+            protocol-count.json
