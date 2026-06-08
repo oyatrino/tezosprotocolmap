@@ -39,6 +39,7 @@ jobs:
           body: |
             Automated quarterly update.
             Changed: tezos.gpx, protocols.json, map.png, protocol-count.json
+          base: main
           branch: auto/update-protocol-data
           delete-branch: true
           add-paths: |
