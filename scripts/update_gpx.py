@@ -2,6 +2,7 @@
 """Scrape Tezos protocol names and update tezos.gpx with new city waypoints."""
 
 import argparse
+import json
 import re
 import sys
 import time
@@ -11,7 +12,10 @@ from bs4 import BeautifulSoup
 
 DEFAULT_NAMING_URL = "https://octez.tezos.com/docs/protocols/naming.html"
 GPX_PATH = "tezos.gpx"
+PROTOCOLS_JSON_PATH = "protocols.json"
+PROTOCOL_COUNT_JSON_PATH = "protocol-count.json"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+TZKT_API = "https://api.tzkt.io/v1"
 
 # Protocol names that don't geocode directly to the intended city.
 CITY_OVERRIDES = {
@@ -21,9 +25,14 @@ CITY_OVERRIDES = {
     "Rio": ("Rio de Janeiro, Brazil", "Rio de Janeiro, Brazil"),
 }
 
+# Map scraped names to TzKT extras.alias where they differ.
+TZKT_ALIAS_MAP = {
+    "ParisC": "Paris C",
+}
+
 
 def scrape_protocols(naming_url):
-    """Return a list of city names from the Tezos naming page (protocol >= 004)."""
+    """Return a list of (number, city_name) tuples from the Tezos naming page (protocol >= 004)."""
     resp = requests.get(naming_url, timeout=30)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -33,7 +42,7 @@ def scrape_protocols(naming_url):
         text = li.get_text(strip=True)
         m = re.match(r"(\d{3})\s+(\S+)", text)
         if m and int(m.group(1)) >= 4:
-            cities.append(m.group(2))
+            cities.append((int(m.group(1)), m.group(2)))
 
     if not cities:
         print("ERROR: Found zero protocols on the naming page. Page structure may have changed.", file=sys.stderr)
@@ -140,6 +149,113 @@ def write_gpx(existing_text, wpt_blocks):
         f.write(header + body + "\n" + footer)
 
 
+def fetch_tzkt_protocols():
+    """Fetch protocol metadata from TzKT API. Returns dict keyed by alias."""
+    try:
+        resp = requests.get(f"{TZKT_API}/protocols", timeout=30)
+        resp.raise_for_status()
+        raw = resp.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"  WARNING: TzKT API unreachable ({exc}), skipping enrichment.", file=sys.stderr)
+        return {}
+
+    protocols = {}
+    levels = []
+    for p in raw:
+        alias = (p.get("extras") or {}).get("alias")
+        if not alias:
+            continue
+        first_level = p.get("firstLevel", 0)
+        protocols[alias] = {
+            "hash": p.get("hash"),
+            "firstLevel": first_level,
+        }
+        if first_level > 0:
+            levels.append(first_level)
+
+    # Batch-fetch activation timestamps.
+    if levels:
+        try:
+            level_str = ",".join(str(lv) for lv in levels)
+            resp = requests.get(
+                f"{TZKT_API}/blocks",
+                params={"level.in": level_str, "select": "level,timestamp"},
+                timeout=30,
+            )
+            resp.raise_for_status()
+            ts_map = {b["level"]: b["timestamp"] for b in resp.json()}
+        except (requests.RequestException, ValueError):
+            ts_map = {}
+    else:
+        ts_map = {}
+
+    for data in protocols.values():
+        data["activationDate"] = ts_map.get(data["firstLevel"])
+
+    return protocols
+
+
+def gpx_coords_for_protocols(scraped, gpx_text):
+    """Match GPX waypoints to protocol names. Returns dict: name -> (lat, lon)."""
+    wpt_data = []
+    for m in re.finditer(
+        r'<wpt lat="([^"]+)" lon="([^"]+)">\s*<name>([^<]+)</name>', gpx_text
+    ):
+        wpt_data.append((m.group(3), float(m.group(1)), float(m.group(2))))
+
+    coords = {}
+    for _, name in scraped:
+        override_display = CITY_OVERRIDES[name][0] if name in CITY_OVERRIDES else None
+        for wpt_name, lat, lon in wpt_data:
+            if override_display and wpt_name == override_display:
+                coords[name] = (lat, lon)
+                break
+            if wpt_name.startswith(name):
+                coords[name] = (lat, lon)
+                break
+    return coords
+
+
+def build_protocols_json(scraped, tzkt_data, gpx_coords):
+    """Merge scraped numbers, TzKT data, and GPX coords into protocols dict."""
+    has_tzkt = bool(tzkt_data)
+    result = {}
+    for number, name in scraped:
+        tzkt_alias = TZKT_ALIAS_MAP.get(name, name)
+        tzkt = tzkt_data.get(tzkt_alias, {})
+        coords = gpx_coords.get(name)
+
+        result[name] = {
+            "number": number,
+            "hash": tzkt.get("hash"),
+            "activationDate": tzkt.get("activationDate"),
+            "mainnet": bool(tzkt.get("hash")) if has_tzkt else None,
+            "lat": coords[0] if coords else None,
+            "lon": coords[1] if coords else None,
+        }
+
+    return result
+
+
+def write_protocols_json(protocols_data):
+    """Write protocols.json and protocol-count.json."""
+    with open(PROTOCOLS_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(protocols_data, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print(f"Wrote {PROTOCOLS_JSON_PATH} with {len(protocols_data)} protocols.")
+
+    count_data = {
+        "schemaVersion": 1,
+        "label": "protocols",
+        "message": str(len(protocols_data)),
+        "color": "blue",
+    }
+    with open(PROTOCOL_COUNT_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(count_data, f, indent=2)
+        f.write("\n")
+    print(f"Wrote {PROTOCOL_COUNT_JSON_PATH}.")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Update tezos.gpx with new protocol cities.")
     parser.add_argument("--url", default=DEFAULT_NAMING_URL, help="URL of the Tezos protocol naming page")
@@ -147,8 +263,8 @@ def main():
 
     naming_url = args.url
     print(f"Scraping protocol names from {naming_url}...")
-    protocols = scrape_protocols(naming_url)
-    print(f"  Found {len(protocols)} protocols: {', '.join(protocols)}")
+    scraped = scrape_protocols(naming_url)
+    print(f"  Found {len(scraped)} protocols: {', '.join(name for _, name in scraped)}")
 
     print("Reading existing GPX...")
     existing_text, existing_names = read_existing_gpx()
@@ -157,7 +273,7 @@ def main():
 
     # Determine which protocol names are new.
     new_protocols = []
-    for p in protocols:
+    for num, p in scraped:
         if p in CITY_OVERRIDES:
             display = CITY_OVERRIDES[p][0]
         else:
@@ -172,37 +288,50 @@ def main():
                 found = True
                 break
         if not found:
-            new_protocols.append(p)
+            new_protocols.append((num, p))
 
-    if not new_protocols:
+    if new_protocols:
+        print(f"New protocols to geocode: {', '.join(name for _, name in new_protocols)}")
+
+        new_wpts = []
+        for _, p in new_protocols:
+            geocode_query = CITY_OVERRIDES[p][1] if p in CITY_OVERRIDES else p
+            print(f"  Geocoding '{geocode_query}'...")
+            coords = geocode(geocode_query)
+            if coords is None:
+                print(f"    WARNING: Could not geocode '{geocode_query}', skipping.")
+                continue
+
+            lat, lon = coords
+            display = display_name_for(p, lat, lon)
+            print(f"    {display} -> ({format_coord(lat)}, {format_coord(lon)})")
+
+            new_wpts.append(build_wpt(display, lat, lon))
+            time.sleep(1)  # Nominatim usage policy: max 1 request/second
+
+        if new_wpts:
+            all_wpts = existing_wpts + new_wpts
+            write_gpx(existing_text, all_wpts)
+            print(f"Updated {GPX_PATH} with {len(new_wpts)} new waypoint(s).")
+        else:
+            print("No new waypoints could be geocoded.")
+    else:
         print("No new protocol cities to add.")
-        return
 
-    print(f"New protocols to geocode: {', '.join(new_protocols)}")
+    # Re-read GPX to get final coords (including any newly added cities).
+    final_text, _ = read_existing_gpx()
 
-    new_wpts = []
-    for p in new_protocols:
-        geocode_query = CITY_OVERRIDES[p][1] if p in CITY_OVERRIDES else p
-        print(f"  Geocoding '{geocode_query}'...")
-        coords = geocode(geocode_query)
-        if coords is None:
-            print(f"    WARNING: Could not geocode '{geocode_query}', skipping.")
-            continue
+    # Enrich with TzKT metadata.
+    print("Fetching protocol metadata from TzKT...")
+    tzkt_data = fetch_tzkt_protocols()
+    if tzkt_data:
+        print(f"  Got metadata for {len(tzkt_data)} protocols from TzKT.")
+    else:
+        print("  No TzKT data available; protocols.json will have null hashes/dates.")
 
-        lat, lon = coords
-        display = display_name_for(p, lat, lon)
-        print(f"    {display} -> ({format_coord(lat)}, {format_coord(lon)})")
-
-        new_wpts.append(build_wpt(display, lat, lon))
-        time.sleep(1)  # Nominatim usage policy: max 1 request/second
-
-    if not new_wpts:
-        print("No new waypoints could be geocoded.")
-        return
-
-    all_wpts = existing_wpts + new_wpts
-    write_gpx(existing_text, all_wpts)
-    print(f"Updated {GPX_PATH} with {len(new_wpts)} new waypoint(s).")
+    gpx_coords = gpx_coords_for_protocols(scraped, final_text)
+    protocols_data = build_protocols_json(scraped, tzkt_data, gpx_coords)
+    write_protocols_json(protocols_data)
 
 
 if __name__ == "__main__":
