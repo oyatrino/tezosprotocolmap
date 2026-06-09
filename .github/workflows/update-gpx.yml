@@ -23,7 +23,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libgeos-dev libproj-dev
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 cartopy matplotlib
+        run: pip install -r requirements.txt
 
       - name: Run update script
         run: python scripts/update_gpx.py --url "${{ vars.NAMING_URL }}"

@@ -13,5 +13,5 @@ Mapping Tezos protocol names on the globe
     * => no clear list for those AFAIK.
 
 * *cities* for protocols testnets and protocols applied on mainnet 
-    * => cf. https://tezos.gitlab.io/protocols/naming.html
+    * => cf. https://octez.tezos.com/docs/protocols/naming.html
     * can be mapped :-) 
