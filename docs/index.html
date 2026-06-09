@@ -83,8 +83,8 @@
         if (d.voting) {
           popupHtml += "<br>Voted: Epoch " + esc(String(d.voting.epoch)) +
             " \u2014 " + esc(d.voting.result) +
-            "<br>Ballots: " + d.voting.yayBallots + " yay, " +
-            d.voting.nayBallots + " nay, " + d.voting.passBallots + " pass";
+            "<br>Ballots: " + esc(String(d.voting.yayBallots)) + " yay, " +
+            esc(String(d.voting.nayBallots)) + " nay, " + esc(String(d.voting.passBallots)) + " pass";
         }
 
         marker.bindPopup(popupHtml);

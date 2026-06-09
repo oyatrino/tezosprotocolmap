@@ -332,13 +332,15 @@ def fetch_voting_epochs():
                         pas = period.get("passBallots") or 0
                         break
 
-            epochs[prop_hash] = {
-                "epoch": epoch.get("index"),
-                "result": status,
-                "yayBallots": yay,
-                "nayBallots": nay,
-                "passBallots": pas,
-            }
+            # Sorted desc by id, so first occurrence is the newest epoch.
+            if prop_hash not in epochs:
+                epochs[prop_hash] = {
+                    "epoch": epoch.get("index"),
+                    "result": status,
+                    "yayBallots": yay,
+                    "nayBallots": nay,
+                    "passBallots": pas,
+                }
 
     return epochs
 
