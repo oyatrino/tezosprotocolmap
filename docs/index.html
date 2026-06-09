@@ -10,13 +10,16 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  #map { height: 100vh; width: 100%; }
+  #title { height: 36px; display: flex; align-items: center; padding: 0 14px; background: #1a1a2e; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
+  #title span { opacity: 0.6; margin-left: 8px; font-weight: 400; }
+  #map { height: calc(100vh - 36px); width: 100%; }
   .legend { background: white; padding: 8px 12px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); line-height: 1.6; font-size: 13px; }
   .legend i { width: 12px; height: 12px; display: inline-block; margin-right: 6px; border-radius: 50%; vertical-align: middle; }
   .legend .line { width: 20px; height: 0; border-top: 2px dashed #888; display: inline-block; margin-right: 6px; vertical-align: middle; }
 </style>
 </head>
 <body>
+<div id="title">Tezos Protocol Cities</div>
 <div id="map"></div>
 <script>
 (function () {
@@ -51,6 +54,9 @@
       }).sort(function (a, b) {
         return a.number - b.number;
       });
+
+      document.getElementById("title").innerHTML =
+        "Tezos Protocol Cities" + "<span>\u2014 " + entries.length + " protocols</span>";
 
       var trailCoords = [];
 
