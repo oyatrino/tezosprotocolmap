@@ -16,6 +16,7 @@ PROTOCOLS_JSON_PATH = "protocols.json"
 PROTOCOL_COUNT_JSON_PATH = "protocol-count.json"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 TZKT_API = "https://api.tzkt.io/v1"
+TEZTNETS_URL = "https://teztnets.com/teztnets.json"
 
 # Protocol names that don't geocode directly to the intended city.
 CITY_OVERRIDES = {
@@ -195,6 +196,43 @@ def fetch_tzkt_protocols():
     return protocols
 
 
+def fetch_testnet_protocols():
+    """Fetch protocol testnets from teztnets.com. Returns dict: city_name -> {rpc_url, ...}."""
+    try:
+        resp = requests.get(TEZTNETS_URL, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"  WARNING: teztnets.com unreachable ({exc}).", file=sys.stderr)
+        return {}
+
+    protocols = {}
+    seen = set()
+    for entry in data.values():
+        if entry.get("category") != "Protocol Teztnets":
+            continue
+        human_name = entry.get("human_name", "")
+        if not human_name.endswith("net"):
+            continue
+        city = human_name[:-3]  # "Ushuaianet" -> "Ushuaia"
+        if city in seen:
+            continue
+        seen.add(city)
+        protocols[city] = {"rpc_url": entry.get("rpc_url")}
+
+    return protocols
+
+
+def fetch_protocol_hash(rpc_url):
+    """Get the current protocol hash from a testnet RPC endpoint."""
+    try:
+        resp = requests.get(f"{rpc_url}/chains/main/blocks/head/protocols", timeout=15)
+        resp.raise_for_status()
+        return resp.json().get("protocol")
+    except (requests.RequestException, ValueError, KeyError):
+        return None
+
+
 def gpx_coords_for_protocols(scraped, gpx_text):
     """Match GPX waypoints to protocol names. Returns dict: name -> (lat, lon)."""
     wpt_data = []
@@ -216,18 +254,27 @@ def gpx_coords_for_protocols(scraped, gpx_text):
     return coords
 
 
-def build_protocols_json(scraped, tzkt_data, gpx_coords):
+def build_protocols_json(scraped, tzkt_data, gpx_coords, testnet_info=None):
     """Merge scraped numbers, TzKT data, and GPX coords into protocols dict."""
     has_tzkt = bool(tzkt_data)
+    testnet_info = testnet_info or {}
     result = {}
     for number, name in scraped:
         tzkt_alias = TZKT_ALIAS_MAP.get(name, name)
         tzkt = tzkt_data.get(tzkt_alias, {})
         coords = gpx_coords.get(name)
 
+        proto_hash = tzkt.get("hash")
+        # For testnet-only protocols, try the testnet RPC.
+        if not proto_hash and name in testnet_info:
+            rpc_url = testnet_info[name].get("rpc_url")
+            if rpc_url:
+                print(f"  Fetching hash for {name} from testnet RPC...")
+                proto_hash = fetch_protocol_hash(rpc_url)
+
         result[name] = {
             "number": number,
-            "hash": tzkt.get("hash"),
+            "hash": proto_hash,
             "activationDate": tzkt.get("activationDate"),
             "mainnet": bool(tzkt.get("hash")) if has_tzkt else None,
             "lat": coords[0] if coords else None,
@@ -265,6 +312,24 @@ def main():
     print(f"Scraping protocol names from {naming_url}...")
     scraped = scrape_protocols(naming_url)
     print(f"  Found {len(scraped)} protocols: {', '.join(name for _, name in scraped)}")
+
+    # Merge testnet-only protocols not yet on the naming page.
+    print("Fetching testnet protocols from teztnets.com...")
+    testnet_protocols = fetch_testnet_protocols()
+    scraped_names = {name for _, name in scraped}
+    testnet_info = {}
+    if testnet_protocols:
+        next_number = max(num for num, _ in scraped) + 1
+        for city in sorted(testnet_protocols):
+            if city not in scraped_names:
+                scraped.append((next_number, city))
+                testnet_info[city] = testnet_protocols[city]
+                print(f"  Added testnet-only protocol: {next_number:03d} {city}")
+                next_number += 1
+        if not testnet_info:
+            print("  No new testnet-only protocols found.")
+    else:
+        print("  No testnet data available.")
 
     print("Reading existing GPX...")
     existing_text, existing_names = read_existing_gpx()
@@ -330,7 +395,7 @@ def main():
         print("  No TzKT data available; protocols.json will have null hashes/dates.")
 
     gpx_coords = gpx_coords_for_protocols(scraped, final_text)
-    protocols_data = build_protocols_json(scraped, tzkt_data, gpx_coords)
+    protocols_data = build_protocols_json(scraped, tzkt_data, gpx_coords, testnet_info)
     write_protocols_json(protocols_data)
 
 
