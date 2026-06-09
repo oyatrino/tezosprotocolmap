@@ -211,7 +211,7 @@ def fetch_testnet_protocols():
     for entry in data.values():
         if entry.get("category") != "Protocol Teztnets":
             continue
-        human_name = entry.get("human_name", "")
+        human_name = entry.get("human_name") or ""
         if not human_name.endswith("net"):
             continue
         city = human_name[:-3]  # "Ushuaianet" -> "Ushuaia"
@@ -226,9 +226,11 @@ def fetch_testnet_protocols():
 def fetch_protocol_hash(rpc_url):
     """Get the current protocol hash from a testnet RPC endpoint."""
     try:
-        resp = requests.get(f"{rpc_url}/chains/main/blocks/head/protocols", timeout=15)
+        url = f"{rpc_url.rstrip('/')}/chains/main/blocks/head/protocols"
+        resp = requests.get(url, timeout=15)
         resp.raise_for_status()
-        return resp.json().get("protocol")
+        data = resp.json()
+        return data.get("protocol") if isinstance(data, dict) else None
     except (requests.RequestException, ValueError, KeyError):
         return None
 
