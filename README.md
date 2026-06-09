@@ -1,12 +1,12 @@
 # tezos protocols map
 Mapping Tezos protocol names on the globe
 
-[![Update GPX](https://github.com/cotezos/tezosprotocolmap/actions/workflows/update-gpx.yml/badge.svg)](https://github.com/cotezos/tezosprotocolmap/actions/workflows/update-gpx.yml)
-[![protocols](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/cotezos/tezosprotocolmap/main/protocol-count.json)](protocols.json)
+[![Update GPX](https://github.com/oyatrino/tezosprotocolmap/actions/workflows/update-gpx.yml/badge.svg)](https://github.com/oyatrino/tezosprotocolmap/actions/workflows/update-gpx.yml)
+[![protocols](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/protocol-count.json)](protocols.json)
 
 ![Tezos Protocol Cities Map](map.png)
 
-[View interactive map](https://cotezos.github.io/tezosprotocolmap/)
+[View interactive map](https://oyatrino.github.io/tezosprotocolmap/)
 
 ## context
 * *cheeses* for feature test nets 
