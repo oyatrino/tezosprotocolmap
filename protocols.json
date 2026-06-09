@@ -158,5 +158,13 @@
     "mainnet": true,
     "lat": 59.437,
     "lon": 24.7536
+  },
+  "Ushuaia": {
+    "number": 25,
+    "hash": "PsUshuai9QapM5TGj1JpuVGkdxz5GykdnEvS6Rh8SUVrARvZLCY",
+    "activationDate": null,
+    "mainnet": false,
+    "lat": -54.8073,
+    "lon": -68.3084
   }
 }
