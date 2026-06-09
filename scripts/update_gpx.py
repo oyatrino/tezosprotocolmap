@@ -140,7 +140,7 @@ def sort_key(wpt_block):
 def write_gpx(existing_text, wpt_blocks):
     """Write the GPX file with sorted waypoints, preserving header/footer."""
     header = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
-    header += '<gpx version="1.1" creator="Tezos Protocols Maps (by Copolycube)">\n'
+    header += '<gpx version="1.1" creator="Tezos Protocol Map">\n'
     footer = "</gpx>\n"
 
     sorted_blocks = sorted(wpt_blocks, key=sort_key)
