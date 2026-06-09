@@ -286,6 +286,63 @@ def build_protocols_json(scraped, tzkt_data, gpx_coords, testnet_info=None):
     return result
 
 
+def fetch_voting_epochs():
+    """Fetch historical voting epoch data from TzKT. Returns dict keyed by proposal hash."""
+    try:
+        resp = requests.get(
+            f"{TZKT_API}/voting/epochs",
+            params={"limit": 100, "sort.desc": "id"},
+            timeout=30,
+        )
+        resp.raise_for_status()
+        raw = resp.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"  WARNING: TzKT voting API unreachable ({exc}).", file=sys.stderr)
+        return {}
+
+    if not isinstance(raw, list):
+        return {}
+
+    epochs = {}
+    for epoch in raw:
+        if not isinstance(epoch, dict):
+            continue
+        proposals = epoch.get("proposals")
+        if not proposals or not isinstance(proposals, list):
+            continue
+        for proposal in proposals:
+            if not isinstance(proposal, dict):
+                continue
+            prop_hash = proposal.get("hash")
+            if not prop_hash:
+                continue
+            status = epoch.get("status") or "unknown"
+            periods = epoch.get("periods")
+            # Extract ballot data from the last period (promotion vote).
+            yay = 0
+            nay = 0
+            pas = 0
+            if isinstance(periods, list):
+                for period in reversed(periods):
+                    if not isinstance(period, dict):
+                        continue
+                    if period.get("kind") in ("promotion", "exploration"):
+                        yay = period.get("yayBallots") or 0
+                        nay = period.get("nayBallots") or 0
+                        pas = period.get("passBallots") or 0
+                        break
+
+            epochs[prop_hash] = {
+                "epoch": epoch.get("index"),
+                "result": status,
+                "yayBallots": yay,
+                "nayBallots": nay,
+                "passBallots": pas,
+            }
+
+    return epochs
+
+
 def write_protocols_json(protocols_data):
     """Write protocols.json and protocol-count.json."""
     with open(PROTOCOLS_JSON_PATH, "w", encoding="utf-8") as f:
@@ -398,6 +455,21 @@ def main():
 
     gpx_coords = gpx_coords_for_protocols(scraped, final_text)
     protocols_data = build_protocols_json(scraped, tzkt_data, gpx_coords, testnet_info)
+
+    # Enrich with historical voting data.
+    print("Fetching voting epoch data from TzKT...")
+    voting_epochs = fetch_voting_epochs()
+    if voting_epochs:
+        matched = 0
+        for proto in protocols_data.values():
+            proto_hash = proto.get("hash")
+            if proto_hash and proto_hash in voting_epochs:
+                proto["voting"] = voting_epochs[proto_hash]
+                matched += 1
+        print(f"  Matched voting data for {matched} protocols.")
+    else:
+        print("  No voting data available.")
+
     write_protocols_json(protocols_data)
 
 
