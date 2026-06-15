@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gpx version="1.1" creator="Tezos Protocol Map">
+  <wpt lat="37.9838" lon="23.7275">
+    <name>Athens, Greece</name>
+    <desc>Capital of Greece</desc>
+  </wpt>
+  <wpt lat="32.5439" lon="44.4208">
+    <name>Babylon, Iraq</name>
+    <desc>Ancient city in Iraq</desc>
+  </wpt>
+  <wpt lat="36.8508" lon="10.1833">
+    <name>Carthage, Tunisia</name>
+    <desc>Ancient city in Tunisia</desc>
+  </wpt>
+  <wpt lat="35.6895" lon="139.6917">
+    <name>Edo (Tokyo), Japan</name>
+    <desc>Former name of Tokyo, Japan</desc>
+  </wpt>
+</gpx>
