@@ -318,7 +318,7 @@ def fetch_voting_epochs():
                 continue
             status = epoch.get("status") or "unknown"
             periods = epoch.get("periods")
-            # Extract ballot data from the last period (promotion vote).
+            # Extract ballot data from the last promotion or exploration period.
             yay = 0
             nay = 0
             pas = 0
