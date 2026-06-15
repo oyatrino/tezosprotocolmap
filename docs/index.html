@@ -88,9 +88,9 @@
 
     trailCoords.push([d.lat, d.lon]);
     if (trail) {
-      map.removeLayer(trail);
-    }
-    if (trailCoords.length > 1) {
+      // Extend the existing polyline incrementally instead of recreating it.
+      trail.addLatLng([d.lat, d.lon]);
+    } else if (trailCoords.length > 1) {
       trail = L.polyline(trailCoords, {
         color: "#888888",
         weight: 1.5,
@@ -156,7 +156,7 @@
   function togglePlayback() {
     if (isPlaying) {
       stopPlayback();
-      // Leave current markers visible, show all.
+      // Clear the partial playback trail and redraw the full set of markers.
       showAll();
     } else {
       clearAll();
