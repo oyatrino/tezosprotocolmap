@@ -74,12 +74,20 @@
         var date = d.activationDate ? d.activationDate.split("T")[0] : "N/A";
         var network = d.mainnet ? "Mainnet" : "Testnet only";
 
-        marker.bindPopup(
+        var popupHtml =
           "<strong>" + esc(String(d.number).padStart(3, "0") + " " + d.name) + "</strong><br>" +
           "Hash: <code>" + esc(hashTrunc) + "</code><br>" +
           "Activated: " + esc(date) + "<br>" +
-          "Network: " + esc(network)
-        );
+          "Network: " + esc(network);
+
+        if (d.voting) {
+          popupHtml += "<br>Voted: Epoch " + esc(String(d.voting.epoch)) +
+            " \u2014 " + esc(d.voting.result) +
+            "<br>Ballots: " + esc(String(d.voting.yayBallots)) + " yay, " +
+            esc(String(d.voting.nayBallots)) + " nay, " + esc(String(d.voting.passBallots)) + " pass";
+        }
+
+        marker.bindPopup(popupHtml);
 
         trailCoords.push([d.lat, d.lon]);
       });
