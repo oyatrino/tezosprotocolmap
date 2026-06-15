@@ -32,6 +32,11 @@
   var COLOR_TESTNET = "#ff7f0e";
   var DAY_MS = 86400000;
 
+  // Floor a timestamp to UTC midnight so date comparisons ignore time-of-day.
+  function utcDayStart(ms) {
+    return Math.floor(ms / DAY_MS) * DAY_MS;
+  }
+
   var map = L.map("map").setView([30, 20], 3);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -91,9 +96,9 @@
 
     trailCoords.push([d.lat, d.lon]);
     if (trail) {
-      map.removeLayer(trail);
-    }
-    if (trailCoords.length > 1) {
+      // Extend the existing polyline incrementally instead of recreating it.
+      trail.addLatLng([d.lat, d.lon]);
+    } else if (trailCoords.length > 1) {
       trail = L.polyline(trailCoords, {
         color: "#888888",
         weight: 1.5,
@@ -203,12 +208,15 @@
   function filterByDate(timestamp) {
     if (isPlaying) return;
     var atMax = timestamp >= Number(sliderInput.max);
+    var sliderDay = utcDayStart(timestamp);
     clearAll();
     var count = 0;
     for (var i = 0; i < entries.length; i++) {
       var d = entries[i];
       if (d.activationDate) {
-        if (new Date(d.activationDate).getTime() <= timestamp) {
+        // Compare on the UTC day so a protocol appears on its activation day,
+        // regardless of the time-of-day baked into the slider's anchor value.
+        if (utcDayStart(new Date(d.activationDate).getTime()) <= sliderDay) {
           addMarker(i);
           count++;
         }
@@ -257,6 +265,13 @@
           L.DomEvent.on(playBtn, "click", function (e) {
             L.DomEvent.preventDefault(e);
             togglePlayback();
+          });
+          // role="button" requires Space/Enter to activate for keyboard users.
+          L.DomEvent.on(playBtn, "keydown", function (e) {
+            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+              L.DomEvent.preventDefault(e);
+              togglePlayback();
+            }
           });
           return container;
         }
