@@ -5,7 +5,14 @@
     "activationDate": "2019-05-30T00:58:55Z",
     "mainnet": true,
     "lat": 37.9838,
-    "lon": 23.7275
+    "lon": 23.7275,
+    "voting": {
+      "epoch": 10,
+      "result": "completed",
+      "yayBallots": 201,
+      "nayBallots": 3,
+      "passBallots": 12
+    }
   },
   "Babylon": {
     "number": 5,
@@ -21,7 +28,14 @@
     "activationDate": "2020-03-05T04:40:30Z",
     "mainnet": true,
     "lat": 36.8508,
-    "lon": 10.1833
+    "lon": 10.1833,
+    "voting": {
+      "epoch": 15,
+      "result": "completed",
+      "yayBallots": 174,
+      "nayBallots": 5,
+      "passBallots": 20
+    }
   },
   "Delphi": {
     "number": 7,
@@ -29,7 +43,14 @@
     "activationDate": "2020-11-12T12:57:22Z",
     "mainnet": true,
     "lat": 38.4814,
-    "lon": 22.5014
+    "lon": 22.5014,
+    "voting": {
+      "epoch": 23,
+      "result": "completed",
+      "yayBallots": 173,
+      "nayBallots": 0,
+      "passBallots": 11
+    }
   },
   "Edo": {
     "number": 8,
@@ -45,7 +66,14 @@
     "activationDate": "2021-05-11T01:32:06Z",
     "mainnet": true,
     "lat": 43.7714,
-    "lon": 11.2542
+    "lon": 11.2542,
+    "voting": {
+      "epoch": 26,
+      "result": "completed",
+      "yayBallots": 159,
+      "nayBallots": 0,
+      "passBallots": 12
+    }
   },
   "Granada": {
     "number": 10,
@@ -53,7 +81,14 @@
     "activationDate": "2021-08-06T09:36:46Z",
     "mainnet": true,
     "lat": 37.1773,
-    "lon": -3.5986
+    "lon": -3.5986,
+    "voting": {
+      "epoch": 32,
+      "result": "completed",
+      "yayBallots": 143,
+      "nayBallots": 5,
+      "passBallots": 21
+    }
   },
   "Hangzhou": {
     "number": 11,
@@ -69,7 +104,14 @@
     "activationDate": "2022-04-01T17:06:59Z",
     "mainnet": true,
     "lat": 38.3656,
-    "lon": 20.7167
+    "lon": 20.7167,
+    "voting": {
+      "epoch": 35,
+      "result": "completed",
+      "yayBallots": 144,
+      "nayBallots": 0,
+      "passBallots": 21
+    }
   },
   "Jakarta": {
     "number": 13,
@@ -77,7 +119,14 @@
     "activationDate": "2022-06-28T21:31:59Z",
     "mainnet": true,
     "lat": -6.1751,
-    "lon": 106.865
+    "lon": 106.865,
+    "voting": {
+      "epoch": 37,
+      "result": "completed",
+      "yayBallots": 114,
+      "nayBallots": 0,
+      "passBallots": 20
+    }
   },
   "Kathmandu": {
     "number": 14,
@@ -85,7 +134,14 @@
     "activationDate": "2022-09-23T20:36:44Z",
     "mainnet": true,
     "lat": 27.7172,
-    "lon": 85.324
+    "lon": 85.324,
+    "voting": {
+      "epoch": 39,
+      "result": "completed",
+      "yayBallots": 141,
+      "nayBallots": 0,
+      "passBallots": 12
+    }
   },
   "Lima": {
     "number": 15,
@@ -93,7 +149,14 @@
     "activationDate": "2022-12-19T01:57:59Z",
     "mainnet": true,
     "lat": -12.0464,
-    "lon": -77.0428
+    "lon": -77.0428,
+    "voting": {
+      "epoch": 41,
+      "result": "completed",
+      "yayBallots": 138,
+      "nayBallots": 0,
+      "passBallots": 21
+    }
   },
   "Mumbai": {
     "number": 16,
@@ -109,7 +172,14 @@
     "activationDate": "2023-06-24T00:07:10Z",
     "mainnet": true,
     "lat": -1.2833,
-    "lon": 36.8167
+    "lon": 36.8167,
+    "voting": {
+      "epoch": 46,
+      "result": "completed",
+      "yayBallots": 122,
+      "nayBallots": 1,
+      "passBallots": 28
+    }
   },
   "Oxford": {
     "number": 18,
@@ -117,7 +187,14 @@
     "activationDate": "2024-02-09T13:23:45Z",
     "mainnet": true,
     "lat": 51.752,
-    "lon": -1.2577
+    "lon": -1.2577,
+    "voting": {
+      "epoch": 55,
+      "result": "completed",
+      "yayBallots": 122,
+      "nayBallots": 0,
+      "passBallots": 22
+    }
   },
   "ParisC": {
     "number": 20,
@@ -133,7 +210,14 @@
     "activationDate": "2025-01-20T20:57:16Z",
     "mainnet": true,
     "lat": 46.8139,
-    "lon": -71.208
+    "lon": -71.208,
+    "voting": {
+      "epoch": 69,
+      "result": "completed",
+      "yayBallots": 95,
+      "nayBallots": 0,
+      "passBallots": 27
+    }
   },
   "Rio": {
     "number": 22,
@@ -141,7 +225,14 @@
     "activationDate": "2025-05-01T11:07:24Z",
     "mainnet": true,
     "lat": -22.9068,
-    "lon": -43.1729
+    "lon": -43.1729,
+    "voting": {
+      "epoch": 72,
+      "result": "completed",
+      "yayBallots": 93,
+      "nayBallots": 0,
+      "passBallots": 21
+    }
   },
   "Seoul": {
     "number": 23,
@@ -149,7 +240,14 @@
     "activationDate": "2025-09-19T14:59:28Z",
     "mainnet": true,
     "lat": 37.5665,
-    "lon": 126.978
+    "lon": 126.978,
+    "voting": {
+      "epoch": 78,
+      "result": "completed",
+      "yayBallots": 78,
+      "nayBallots": 0,
+      "passBallots": 22
+    }
   },
   "Tallinn": {
     "number": 24,
@@ -157,7 +255,14 @@
     "activationDate": "2026-01-24T16:06:58Z",
     "mainnet": true,
     "lat": 59.437,
-    "lon": 24.7536
+    "lon": 24.7536,
+    "voting": {
+      "epoch": 83,
+      "result": "completed",
+      "yayBallots": 75,
+      "nayBallots": 0,
+      "passBallots": 19
+    }
   },
   "Ushuaia": {
     "number": 25,
@@ -165,6 +270,13 @@
     "activationDate": null,
     "mainnet": false,
     "lat": -54.8073,
-    "lon": -68.3084
+    "lon": -68.3084,
+    "voting": {
+      "epoch": 90,
+      "result": "voting",
+      "yayBallots": 69,
+      "nayBallots": 0,
+      "passBallots": 19
+    }
   }
 }
