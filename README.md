@@ -1,3 +1,13 @@
+<table align="center">
+<tr><td align="center" width="640">
+
+## ▶&nbsp; [Open the interactive map](https://oyatrino.github.io/tezosprotocolmap/)
+
+🌍 &nbsp;Every Tezos protocol upgrade mapped to its namesake city, with on-chain governance history
+
+</td></tr>
+</table>
+
 # tezos protocols map
 Mapping Tezos protocol names on the globe
 
@@ -5,8 +15,6 @@ Mapping Tezos protocol names on the globe
 [![protocols](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/protocol-count.json)](protocols.json)
 
 ![Tezos Protocol Cities Map](map.png)
-
-[View interactive map](https://oyatrino.github.io/tezosprotocolmap/)
 
 ## context
 * *cheeses* for feature test nets 
