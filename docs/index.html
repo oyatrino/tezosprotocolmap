@@ -59,7 +59,7 @@
     return Math.floor(ms / DAY_MS) * DAY_MS;
   }
 
-  var map = L.map("map").setView([30, 20], 3);
+  var map = L.map("map", { minZoom: 2 }).setView([30, 20], 3);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 18
