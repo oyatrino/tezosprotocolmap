@@ -23,3 +23,13 @@ Mapping Tezos protocol names on the globe
 * *cities* for protocols testnets and protocols applied on mainnet 
     * => cf. https://octez.tezos.com/docs/protocols/naming.html
     * can be mapped :-) 
+
+## data sources
+`protocols.json` is built by [`scripts/update_gpx.py`](scripts/update_gpx.py) from:
+
+* **Protocol naming (mainnet & testnet cities)** — the octez docs naming page:
+  https://octez.tezos.com/docs/protocols/naming.html
+* **Testnet-only protocols** — teztnets.com:
+  https://teztnets.com/teztnets.json
+* **Activation dates, protocol hashes & on-chain voting results** — the TzKT API:
+  https://api.tzkt.io
