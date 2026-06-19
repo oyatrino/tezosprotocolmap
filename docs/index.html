@@ -2,27 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tezos Protocol Cities Map — Upgrade & Governance History</title>
-<meta name="description" content="Interactive map of Tezos protocol upgrades, each named after a city (Athens, Babylon, Carthage, Delphi, Edo, Florence, Granada, Hangzhou, Ithaca, Jakarta, Kathmandu, Lima, Mumbai, Nairobi, Oxford, Paris, Quebec, Rio, Seoul, Tallinn). Plotted on a world globe as a chronological governance trail with on-chain voting results.">
-<meta name="keywords" content="Tezos, Tezos protocols, protocol upgrade, on-chain governance, Tezos voting, Octez, blockchain map, interactive map, Athens, Paris, Quebec, Rio, Seoul, baking, Tezos roadmap">
-<meta name="author" content="oyatrino">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#1a1a2e">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
 <link rel="canonical" href="https://oyatrino.github.io/tezosprotocolmap/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Tezos Protocol Cities Map">
-<meta property="og:title" content="Tezos Protocol Cities Map — Upgrade & Governance History">
-<meta property="og:description" content="Every Tezos protocol upgrade mapped to its namesake city, plotted on a globe as a chronological governance trail with on-chain voting results.">
-<meta property="og:url" content="https://oyatrino.github.io/tezosprotocolmap/">
-<meta property="og:image" content="https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/map.png">
-<meta property="og:image:alt" content="World map of Tezos protocol cities connected by a chronological trail">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tezos Protocol Cities Map">
-<meta name="twitter:description" content="Tezos protocol upgrades mapped to their namesake cities on a globe, with on-chain voting history.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/map.png">
+<meta name="keywords" content="Tezos, Tezos protocols, protocol upgrade, on-chain governance, Tezos voting, Octez, blockchain map, interactive map, Athens, Paris, Quebec, Seoul, Tezos roadmap">
+<link rel="apple-touch-icon" href="favicon.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Tezos Protocol Cities Map","url":"https://oyatrino.github.io/tezosprotocolmap/","applicationCategory":"BrowserApplication","operatingSystem":"Web","browserRequirements":"Requires JavaScript","description":"Interactive map of Tezos protocol-upgrade cities and on-chain governance history, rendered on a world globe.","author":{"@type":"Organization","name":"oyatrino"}}
 </script>
@@ -30,330 +13,55 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<style>
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  #title { height: 36px; display: flex; align-items: center; padding: 0 14px; background: #1a1a2e; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
-  #title-count { opacity: 0.6; margin-left: 8px; font-weight: 400; }
-  #title a { margin-left: auto; display: flex; align-items: center; color: #fff; opacity: 0.6; transition: opacity 0.15s; }
-  #title a:hover { opacity: 1; }
-  #map { height: calc(100vh - 36px); width: 100%; }
-  .legend { background: white; padding: 8px 12px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); line-height: 1.6; font-size: 13px; }
-  .legend i { width: 12px; height: 12px; display: inline-block; margin-right: 6px; border-radius: 50%; vertical-align: middle; }
-  .legend .line { width: 20px; height: 0; border-top: 2px dashed #888; display: inline-block; margin-right: 6px; vertical-align: middle; }
-  .playback-control a { background: white; width: 34px; height: 34px; line-height: 34px; text-align: center; font-size: 18px; display: block; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); text-decoration: none; color: #333; }
-  .playback-control a:hover { background: #f4f4f4; }
-</style>
+<script src="https://cdn.jsdelivr.net/gh/periplum/periplum-core@v0.3.0/dist/periplum.js"></script>
 </head>
 <body>
-<div id="title"><span id="title-text">Tezos Protocol Cities</span><span id="title-count"></span><a href="https://github.com/oyatrino/tezosprotocolmap" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.64 7.64 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a></div>
-<div id="map"></div>
 <script>
-(function () {
-  var PROTOCOLS_URL = "https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/protocols.json";
-  var COLOR_MAINNET = "#1f77b4";
-  var COLOR_TESTNET = "#ff7f0e";
-  var DAY_MS = 86400000;
-
-  // Floor a timestamp to UTC midnight so date comparisons ignore time-of-day.
-  function utcDayStart(ms) {
-    return Math.floor(ms / DAY_MS) * DAY_MS;
-  }
-
-  var map = L.map("map", { minZoom: 2 }).setView([30, 20], 3);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 18
-  }).addTo(map);
-
-  function esc(s) {
-    var el = document.createElement("span");
-    el.textContent = s;
-    return el.innerHTML;
-  }
-
-  // Shared state.
-  var entries = [];
-  var markers = [];
-  var trail = null;
-  var trailCoords = [];
-  var playbackTimer = null;
-  var playbackIndex = 0;
-  var isPlaying = false;
-  var sliderInput = null;
-  var sliderLabel = null;
-
-  function buildPopup(d) {
-    var hashTrunc = d.hash ? d.hash.substring(0, 12) + "..." : "N/A";
-    var date = d.activationDate ? d.activationDate.split("T")[0] : "N/A";
-    var network = d.mainnet ? "Mainnet" : "Testnet only";
-
-    var html =
-      "<strong>" + esc(String(d.number).padStart(3, "0") + " " + d.name) + "</strong><br>" +
-      "Hash: <code>" + esc(hashTrunc) + "</code><br>" +
-      "Activated: " + esc(date) + "<br>" +
-      "Network: " + esc(network);
-
-    if (d.voting) {
-      html += "<br>Voted: Epoch " + esc(String(d.voting.epoch)) +
-        " \u2014 " + esc(d.voting.result) +
-        "<br>Ballots: " + esc(String(d.voting.yayBallots)) + " yay, " +
-        esc(String(d.voting.nayBallots)) + " nay, " + esc(String(d.voting.passBallots)) + " pass";
-    }
-
-    return html;
-  }
-
-  function addMarker(index) {
-    var d = entries[index];
-    var color = d.mainnet ? COLOR_MAINNET : COLOR_TESTNET;
-    var marker = L.circleMarker([d.lat, d.lon], {
-      radius: 7,
-      fillColor: color,
-      color: "#fff",
-      weight: 1.5,
-      fillOpacity: 0.9
-    }).addTo(map);
-    marker.bindPopup(buildPopup(d));
-    markers.push(marker);
-
-    trailCoords.push([d.lat, d.lon]);
-    if (trail) {
-      // Extend the existing polyline incrementally instead of recreating it.
-      trail.addLatLng([d.lat, d.lon]);
-    } else if (trailCoords.length > 1) {
-      trail = L.polyline(trailCoords, {
-        color: "#888888",
-        weight: 1.5,
-        dashArray: "6 4",
-        opacity: 0.5
-      }).addTo(map);
-    }
-  }
-
-  function clearAll() {
-    markers.forEach(function (m) { map.removeLayer(m); });
-    markers = [];
-    if (trail) {
-      map.removeLayer(trail);
-      trail = null;
-    }
-    trailCoords = [];
-  }
-
-  function updateTitle(count) {
-    document.getElementById("title-text").textContent = "Tezos Protocol Cities";
-    var countEl = document.getElementById("title-count");
-    if (typeof count === "number") {
-      countEl.textContent = "\u2014 " + count + " protocol" + (count !== 1 ? "s" : "");
-    } else {
-      countEl.textContent = "";
-    }
-  }
-
-  function showAll() {
-    clearAll();
-    for (var i = 0; i < entries.length; i++) {
-      addMarker(i);
-    }
-    updateTitle(entries.length);
-  }
-
-  // Playback logic.
-  function stopPlayback() {
-    if (playbackTimer) {
-      clearTimeout(playbackTimer);
-      playbackTimer = null;
-    }
-    isPlaying = false;
-    playbackIndex = 0;
-    if (playBtn) {
-      playBtn.textContent = "\u25B6";
-      playBtn.setAttribute("aria-label", "Play timeline");
-    }
-    setSliderEnabled(true);
-  }
-
-  function playStep() {
-    if (playbackIndex >= entries.length) {
-      stopPlayback();
-      return;
-    }
-    addMarker(playbackIndex);
-    updateTitle(playbackIndex + 1);
-    playbackIndex++;
-    playbackTimer = setTimeout(playStep, 800);
-  }
-
-  function togglePlayback() {
-    if (isPlaying) {
-      stopPlayback();
-      showAll();
-    } else {
-      clearAll();
-      isPlaying = true;
-      playbackIndex = 0;
-      if (playBtn) {
-        playBtn.textContent = "\u23F8";
-        playBtn.setAttribute("aria-label", "Pause timeline");
-      }
-      setSliderEnabled(false);
-      playStep();
-    }
-  }
-
-  var playBtn = null;
-
-  // Slider logic.
-  function setSliderEnabled(enabled) {
-    if (!sliderInput) return;
-    sliderInput.disabled = !enabled;
-    sliderInput.style.opacity = enabled ? "1" : "0.5";
-    if (enabled) {
-      sliderInput.value = sliderInput.max;
-      updateSliderLabel(Number(sliderInput.max));
-    }
-  }
-
-  function updateSliderLabel(ts) {
-    if (!sliderLabel) return;
-    if (ts >= Number(sliderInput.max)) {
-      sliderLabel.textContent = "All protocols";
-    } else {
-      var d = new Date(ts);
-      var yyyy = d.getUTCFullYear();
-      var mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-      var dd = String(d.getUTCDate()).padStart(2, "0");
-      sliderLabel.textContent = "Protocols as of " + yyyy + "-" + mm + "-" + dd;
-    }
-  }
-
-  function filterByDate(timestamp) {
-    if (isPlaying) return;
-    var atMax = timestamp >= Number(sliderInput.max);
-    var sliderDay = utcDayStart(timestamp);
-    clearAll();
-    var count = 0;
-    for (var i = 0; i < entries.length; i++) {
-      var d = entries[i];
-      if (d.activationDate) {
-        // Compare on the UTC day so a protocol appears on its activation day,
-        // regardless of the time-of-day baked into the slider's anchor value.
-        if (utcDayStart(new Date(d.activationDate).getTime()) <= sliderDay) {
-          addMarker(i);
-          count++;
-        }
-      } else {
-        // Testnet-only (no activation date): show only when slider at max.
-        if (atMax) {
-          addMarker(i);
-          count++;
-        }
-      }
-    }
-    updateTitle(count);
-    updateSliderLabel(timestamp);
-  }
-
-  fetch(PROTOCOLS_URL)
-    .then(function (r) {
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json();
-    })
-    .then(function (data) {
-      entries = Object.keys(data).map(function (name) {
-        var d = data[name];
-        d.name = name;
-        return d;
-      }).filter(function (d) {
-        return d.lat != null && d.lon != null;
-      }).sort(function (a, b) {
-        return a.number - b.number;
-      });
-
-      showAll();
-
-      // Playback control.
-      var PlaybackControl = L.Control.extend({
-        options: { position: "topleft" },
-        onAdd: function () {
-          var container = L.DomUtil.create("div", "playback-control leaflet-bar");
-          playBtn = L.DomUtil.create("a", "", container);
-          playBtn.href = "#";
-          playBtn.title = "Play/Pause timeline";
-          playBtn.textContent = "\u25B6";
-          playBtn.setAttribute("role", "button");
-          playBtn.setAttribute("aria-label", "Play timeline");
-          L.DomEvent.disableClickPropagation(container);
-          L.DomEvent.on(playBtn, "click", function (e) {
-            L.DomEvent.preventDefault(e);
-            togglePlayback();
-          });
-          // role="button" requires Space/Enter to activate for keyboard users.
-          L.DomEvent.on(playBtn, "keydown", function (e) {
-            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-              L.DomEvent.preventDefault(e);
-              togglePlayback();
-            }
-          });
-          return container;
-        }
-      });
-      new PlaybackControl().addTo(map);
-
-      // Date slider control.
-      var dates = entries
-        .filter(function (d) { return d.activationDate; })
-        .map(function (d) { return new Date(d.activationDate).getTime(); });
-
-      if (dates.length > 0) {
-        var minDate = Math.min.apply(null, dates);
-        var maxDate = Date.now();
-
-        var SliderControl = L.Control.extend({
-          options: { position: "bottomleft" },
-          onAdd: function () {
-            var container = L.DomUtil.create("div", "");
-            container.style.cssText = "background:white;padding:10px 14px;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.3);min-width:200px;";
-            sliderLabel = L.DomUtil.create("div", "", container);
-            sliderLabel.style.cssText = "font-size:12px;margin-bottom:6px;color:#333;font-weight:500;";
-            sliderLabel.textContent = "All protocols";
-            sliderInput = L.DomUtil.create("input", "", container);
-            sliderInput.type = "range";
-            sliderInput.min = String(minDate);
-            sliderInput.max = String(maxDate);
-            sliderInput.value = String(maxDate);
-            sliderInput.step = String(DAY_MS);
-            sliderInput.style.cssText = "width:100%;margin:0;cursor:pointer;";
-            L.DomEvent.disableClickPropagation(container);
-            L.DomEvent.disableScrollPropagation(container);
-            L.DomEvent.on(sliderInput, "input", function () {
-              filterByDate(Number(sliderInput.value));
-            });
-            return container;
-          }
-        });
-        new SliderControl().addTo(map);
-      }
-
-      // Legend control.
-      var legend = L.control({ position: "bottomright" });
-      legend.onAdd = function () {
-        var div = L.DomUtil.create("div", "legend");
-        div.innerHTML =
-          "<strong>Tezos Protocols</strong><br>" +
-          '<i style="background:' + COLOR_MAINNET + '"></i> Mainnet<br>' +
-          '<i style="background:' + COLOR_TESTNET + '"></i> Testnet only<br>' +
-          '<span class="line"></span> Chronological trail';
-        L.DomEvent.disableClickPropagation(div);
-        L.DomEvent.disableScrollPropagation(div);
-        return div;
+  // Turn the existing protocols.json (keyed by name) into Periplum canonical items.
+  function adapt(raw) {
+    return Object.keys(raw).map(function (name) {
+      var d = raw[name];
+      var pop = {
+        "Hash": d.hash ? d.hash.slice(0, 12) + "…" : "N/A",
+        "Activated": d.activationDate ? d.activationDate.split("T")[0] : "N/A",
+        "Network": d.mainnet ? "Mainnet" : "Testnet only"
       };
-      legend.addTo(map);
-    })
-    .catch(function (err) {
-      console.error("Failed to load protocols.json:", err);
-    });
-})();
+      if (d.voting) {
+        pop["Vote"] = "Epoch " + d.voting.epoch + " — " + d.voting.result;
+        pop["Ballots"] = d.voting.yayBallots + " yay / " + d.voting.nayBallots + " nay / " + d.voting.passBallots + " pass";
+      }
+      var placements = (d.lat != null && d.lon != null)
+        ? [{ map: "earth", lat: d.lat, lon: d.lon, label: name, popup: pop }] : [];
+      return {
+        name: String(d.number).padStart(3, "0") + " " + name,
+        date: d.activationDate || null,
+        status: d.mainnet ? "mainnet" : "testnet only",
+        _num: d.number, placements: placements
+      };
+    }).filter(function (it) { return it.placements.length; })
+      .sort(function (a, b) { return a._num - b._num; });
+  }
+
+  Periplum.render({
+    title: "Tezos Protocol Cities",
+    dataUrl: "https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/protocols.json",
+    adapt: adapt,
+    repo: "https://github.com/oyatrino/tezosprotocolmap",
+    favicon: "favicon.png",
+    theme: { headerBg: "#1a1a2e", accent: "#4da3ff" },
+    routeLabel: "Chronological trail",
+    statusColors: { "mainnet": "#1f77b4", "testnet only": "#ff7f0e" },
+    seo: {
+      description: "Interactive map of Tezos protocol upgrades, each named after a city, plotted on a world globe as a chronological governance trail with on-chain voting results.",
+      image: "https://raw.githubusercontent.com/oyatrino/tezosprotocolmap/main/map.png"
+    },
+    basemaps: [
+      { id: "earth", name: "🌍 Earth", type: "tiles",
+        tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution: "&copy; OpenStreetMap contributors",
+        minZoom: 2, initialView: [30, 20], initialZoom: 3 }
+    ]
+  });
 </script>
 </body>
 </html>
