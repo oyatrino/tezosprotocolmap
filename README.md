@@ -9,6 +9,8 @@
 </table>
 
 # tezos protocols map
+
+[![Built with Periplum](https://img.shields.io/badge/built_with-Periplum-4da3ff)](https://periplum.js.org)
 Mapping Tezos protocol names on the globe
 
 [![Update GPX](https://github.com/oyatrino/tezosprotocolmap/actions/workflows/update-gpx.yml/badge.svg)](https://github.com/oyatrino/tezosprotocolmap/actions/workflows/update-gpx.yml)
