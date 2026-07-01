@@ -267,13 +267,13 @@
   "Ushuaia": {
     "number": 25,
     "hash": "PsUshuai9QapM5TGj1JpuVGkdxz5GykdnEvS6Rh8SUVrARvZLCY",
-    "activationDate": null,
-    "mainnet": false,
+    "activationDate": "2026-06-30T00:31:52Z",
+    "mainnet": true,
     "lat": -54.8073,
     "lon": -68.3084,
     "voting": {
       "epoch": 90,
-      "result": "voting",
+      "result": "completed",
       "yayBallots": 69,
       "nayBallots": 0,
       "passBallots": 19
